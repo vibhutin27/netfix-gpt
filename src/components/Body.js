@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { createBrowserRouter, useNavigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router-dom';
 import Browse from './Browse'
 import Login from './Login'
@@ -10,7 +10,7 @@ import {addUser, removeUser} from '../utils/userSlice'
 
 const Body = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  
 
   const appRouter = createBrowserRouter([
     {
@@ -30,8 +30,7 @@ const Body = () => {
           const {uid, email, displayName} = user.uid;
           // ...in above code we can fetch multiple data from the user whenever auth state change.
           dispatch(addUser({uid: uid, email: email, displayName: displayName}));
-          //when user sign in then here we have applied the navigation to another page with the help of useNavigate hook and the hook come form the router-DOM
-          navigate("/browse");
+          
 
 
         } else {
