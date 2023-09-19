@@ -27,9 +27,9 @@ const Body = () => {
         if (user) {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/auth.user
-          const {uid, email, displayName} = user.uid;
+          const {uid, email, displayName, photoURL} = user.uid;
           // ...in above code we can fetch multiple data from the user whenever auth state change.
-          dispatch(addUser({uid: uid, email: email, displayName: displayName}));
+          dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL,}));
           
 
 

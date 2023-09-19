@@ -2,8 +2,10 @@ import React, { useRef, useState } from 'react'
 import Header from './Header'
 import {checkValidateData, } from '../utils/validate'
 import { auth } from '../utils/firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile  } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 
 
@@ -13,9 +15,11 @@ const Login = () => {
   const [isSignInForm, setIsSignForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const email = useRef(null);
   const password = useRef(null);
+  const name = useRef(null);
 
   const handleButtonClick = () => {
     console.log(email.current.value);
@@ -29,16 +33,40 @@ const Login = () => {
       createUserWithEmailAndPassword(
         auth, 
         email.current.value, 
-        password.current.value
+        password.current.value,
+        
         )
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        console.log(user);
-        // ...Use looged in and navigate to browse page 
-        navigate("/browse");
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            console.log(user);
+            // ...Use looged in and navigate to browse page 
+            updateProfile(user,  {
+              displayName: name.current.value, 
+              photoURL: "https://media.licdn.com/media/AAYQAQSOAAgAAQAAAAAAAB-zrMZEDXI2T62PSuT6kpB6qg.png"
+            }).then(() => {
+              // Profile updated!
+              // ...
+              const {uid, email, displayName, photoURL} = auth.currentUser;
+              dispatch(
+                addUser(
+                  {
+                     uid: uid,
+                     email: email, 
+                     displayName: 
+                     displayName, 
+                     photoURL: photoURL
+                    }
+              ));
+              navigate('/browse');
+            }).catch((error) => {
+              // An error occurred
+              // ...
+              setErrorMessage(error.message);
+            });
+            navigate("/browse");
 
-      })
+          })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -91,7 +119,9 @@ const Login = () => {
           className='p-2 m-2 w-full bg-gray-700 rounded-lg'
         />
         {!isSignInForm && 
-          <input type="text" 
+          <input 
+          ref={name}
+          type="text" 
           placeholder='Full Name' 
           className='p-2 m-2 w-full bg-gray-700 rounded-lg'
           />
