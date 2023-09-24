@@ -9,6 +9,7 @@ import { addUser } from '../utils/userSlice';
 
 
 
+
 const Login = () => {
 
   
@@ -43,7 +44,7 @@ const Login = () => {
             // ...Use looged in and navigate to browse page 
             updateProfile(user,  {
               displayName: name.current.value, 
-              photoURL: "https://media.licdn.com/media/AAYQAQSOAAgAAQAAAAAAAB-zrMZEDXI2T62PSuT6kpB6qg.png"
+              photoURL: '',
             }).then(() => {
               // Profile updated!
               // ...

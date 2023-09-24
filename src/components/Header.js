@@ -27,7 +27,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+   const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
@@ -44,6 +44,9 @@ const Header = () => {
 
       }
     });
+
+    //this will be called when component unmounts
+    return () => unsubscribe();
   },[]);
 
   return (
@@ -54,7 +57,7 @@ const Header = () => {
 
       <div className='flex'>
       <FontAwesomeIcon className="w-8" icon={icon({name: 'user-secret'})} /> 
-      <img src='https://occ-0-5005-3647.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABdYJV5wt63AcxNaDoqDXUhqZb55oN5Dxt1m-Zdn_z5rn_hIq9m8dA8JB2xdcPmrY3yXnlVWYKPXnOrbv2QN4aEVU28dESJg.png?r=1d4'  />
+      
       <button onClick={handleSignOut} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded '>  Sign Out</button>
       </div>
     </div>
